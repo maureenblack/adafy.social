@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import Navigation from '../components/Navigation';
 import Logo from '../components/Logo';
 import WalletConnect from '../components/WalletConnect';
 
@@ -12,18 +13,7 @@ const gradientAnimation = keyframes`
 const Container = styled.div`
   min-height: 100vh;
   background: linear-gradient(135deg, #0033AD11 0%, #ffffff 100%);
-`;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  max-width: 1400px;
-  margin: 0 auto;
-  backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.8);
-  border-radius: 0 0 16px 16px;
+  padding-top: 70px; // Add space for fixed navigation
 `;
 
 const HeroSection = styled.section`
@@ -104,45 +94,43 @@ const CTAButton = styled.button`
 
 const HomePage = () => {
   return (
-    <Container>
-      <Header>
-        <Logo variant="full" size={48} />
-        <WalletConnect />
-      </Header>
+    <>
+      <Navigation />
+      <Container>
+        <HeroSection>
+          <h1>The Future of Social is Here</h1>
+          <p className="lead">
+            Experience true ownership of your content, ad-free social networking, and earn rewards
+            for your contributions - all powered by Cardano blockchain.
+          </p>
+          <div>
+            <CTAButton>Connect Wallet</CTAButton>
+            <CTAButton style={{ background: 'transparent', border: '2px solid var(--primary)', color: 'var(--primary)' }}>
+              Learn More
+            </CTAButton>
+          </div>
+        </HeroSection>
 
-      <HeroSection>
-        <h1>The Future of Social is Here</h1>
-        <p className="lead">
-          Experience true ownership of your content, ad-free social networking, and earn rewards
-          for your contributions - all powered by Cardano blockchain.
-        </p>
-        <div>
-          <CTAButton>Connect Wallet</CTAButton>
-          <CTAButton style={{ background: 'transparent', border: '2px solid var(--primary)', color: 'var(--primary)' }}>
-            Learn More
-          </CTAButton>
-        </div>
-      </HeroSection>
-
-      <FeatureGrid>
-        <FeatureCard>
-          <h3>🎯 Own Your Content</h3>
-          <p>Your posts are stored on IPFS and ownership is verified on Cardano blockchain. No more platform lock-in.</p>
-        </FeatureCard>
-        <FeatureCard>
-          <h3>💰 Earn Rewards</h3>
-          <p>Get tipped in ADA for quality content. Build your reputation and earn from your social presence.</p>
-        </FeatureCard>
-        <FeatureCard>
-          <h3>🛡️ Ad-Free Forever</h3>
-          <p>No ads, no tracking, no algorithms. Just pure, unfiltered social interaction.</p>
-        </FeatureCard>
-        <FeatureCard>
-          <h3>🌐 Decentralized</h3>
-          <p>Built on Cardano blockchain, ensuring transparency, security, and true ownership.</p>
-        </FeatureCard>
-      </FeatureGrid>
-    </Container>
+        <FeatureGrid id="features">
+          <FeatureCard>
+            <h3>🎯 Own Your Content</h3>
+            <p>Your posts are stored on IPFS and ownership is verified on Cardano blockchain. No more platform lock-in.</p>
+          </FeatureCard>
+          <FeatureCard>
+            <h3>💰 Earn Rewards</h3>
+            <p>Get tipped in ADA for quality content. Build your reputation and earn from your social presence.</p>
+          </FeatureCard>
+          <FeatureCard>
+            <h3>🛡️ Ad-Free Forever</h3>
+            <p>No ads, no tracking, no algorithms. Just pure, unfiltered social interaction.</p>
+          </FeatureCard>
+          <FeatureCard>
+            <h3>🌐 Decentralized</h3>
+            <p>Built on Cardano blockchain, ensuring transparency, security, and true ownership.</p>
+          </FeatureCard>
+        </FeatureGrid>
+      </Container>
+    </>
   );
 };
 
