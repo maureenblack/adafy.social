@@ -3,21 +3,17 @@
 :root {
   --primary: #0033AD;
   --primary-light: #3355FF;
-  --background: #FFFFFF;
-  --text-primary: #1A1A1A;
-  --text-secondary: #666666;
-  --surface: #F5F5F5;
-  --border: #E0E0E0;
-  --error: #DC2626;
-  --success: #059669;
-}
-
-[data-theme="dark"] {
-  --background: #1A1A1A;
+  --primary-dark: #001F66;
+  --primary-gradient: linear-gradient(135deg, #0033AD 0%, #3355FF 100%);
+  --background: #001233;
+  --background-light: #001847;
   --text-primary: #FFFFFF;
-  --text-secondary: #A3A3A3;
-  --surface: #262626;
-  --border: #404040;
+  --text-secondary: #B8C7E5;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-light: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.1);
+  --error: #FF4B4B;
+  --success: #00C853;
 }
 
 * {
@@ -38,6 +34,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 button, input, textarea {
@@ -54,6 +51,45 @@ button, input, textarea {
   100% { opacity: 0.5; }
 }
 
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px rgba(51, 85, 255, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(51, 85, 255, 0.8); }
+  100% { box-shadow: 0 0 5px rgba(51, 85, 255, 0.5); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+.connect-wallet-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.connect-wallet-btn::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: rotate(45deg);
+  animation: shimmer 3s infinite;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   h1 {
@@ -67,5 +103,5 @@ button, input, textarea {
 
 /* Smooth transitions */
 * {
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: all 0.3s ease;
 }
