@@ -1,8 +1,7 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import Navigation from '../components/Navigation';
-import Logo from '../components/Logo';
-import WalletConnect from '../components/WalletConnect';
+import Feed from '../components/Feed';
 
 const gradientAnimation = keyframes`
   0% { background-position: 0% 50%; }
@@ -12,8 +11,8 @@ const gradientAnimation = keyframes`
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #0033AD11 0%, #ffffff 100%);
-  padding-top: 70px; // Add space for fixed navigation
+  background: linear-gradient(135deg, var(--background) 0%, var(--background-light) 100%);
+  padding-top: 70px;
 `;
 
 const HeroSection = styled.section`
@@ -21,11 +20,16 @@ const HeroSection = styled.section`
   padding: 80px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  background: linear-gradient(180deg, 
+    rgba(0, 18, 51, 0.8) 0%,
+    rgba(0, 18, 51, 0) 100%
+  );
+  border-radius: 0 0 30px 30px;
 
   h1 {
     font-size: 4rem;
     font-weight: 800;
-    background: linear-gradient(90deg, #0033AD, #3355FF);
+    background: linear-gradient(90deg, #3355FF, #0033AD);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 1.5rem;
@@ -43,40 +47,8 @@ const HeroSection = styled.section`
   }
 `;
 
-const FeatureGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  padding: 40px 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-`;
-
-const FeatureCard = styled.div`
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 51, 173, 0.1);
-  transition: transform 0.3s ease;
-
-  &:hover {
-    transform: translateY(-5px);
-  }
-
-  h3 {
-    color: var(--primary);
-    margin-bottom: 1rem;
-    font-size: 1.5rem;
-  }
-
-  p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-`;
-
 const CTAButton = styled.button`
-  background: var(--primary);
+  background: var(--primary-gradient);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -85,10 +57,48 @@ const CTAButton = styled.button`
   cursor: pointer;
   transition: all 0.3s ease;
   margin: 0 10px;
+  position: relative;
+  overflow: hidden;
   
   &:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 20px rgba(0, 51, 173, 0.2);
+    box-shadow: 0 4px 20px rgba(51, 85, 255, 0.3);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent,
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transform: rotate(45deg);
+    animation: shimmer 3s infinite;
+  }
+`;
+
+const MainContent = styled.main`
+  position: relative;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    background: linear-gradient(180deg, 
+      var(--background) 0%,
+      transparent 100%
+    );
+    z-index: -1;
   }
 `;
 
@@ -104,31 +114,20 @@ const HomePage = () => {
             for your contributions - all powered by Cardano blockchain.
           </p>
           <div>
-            <CTAButton>Connect Wallet</CTAButton>
-            <CTAButton style={{ background: 'transparent', border: '2px solid var(--primary)', color: 'var(--primary)' }}>
+            <CTAButton className="connect-wallet-btn">Connect Wallet</CTAButton>
+            <CTAButton style={{ 
+              background: 'transparent',
+              border: '2px solid var(--primary-light)',
+              color: 'var(--text-primary)'
+            }}>
               Learn More
             </CTAButton>
           </div>
         </HeroSection>
 
-        <FeatureGrid id="features">
-          <FeatureCard>
-            <h3>🎯 Own Your Content</h3>
-            <p>Your posts are stored on IPFS and ownership is verified on Cardano blockchain. No more platform lock-in.</p>
-          </FeatureCard>
-          <FeatureCard>
-            <h3>💰 Earn Rewards</h3>
-            <p>Get tipped in ADA for quality content. Build your reputation and earn from your social presence.</p>
-          </FeatureCard>
-          <FeatureCard>
-            <h3>🛡️ Ad-Free Forever</h3>
-            <p>No ads, no tracking, no algorithms. Just pure, unfiltered social interaction.</p>
-          </FeatureCard>
-          <FeatureCard>
-            <h3>🌐 Decentralized</h3>
-            <p>Built on Cardano blockchain, ensuring transparency, security, and true ownership.</p>
-          </FeatureCard>
-        </FeatureGrid>
+        <MainContent>
+          <Feed />
+        </MainContent>
       </Container>
     </>
   );
