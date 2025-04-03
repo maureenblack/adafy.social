@@ -5,15 +5,18 @@
   --primary-light: #3355FF;
   --primary-dark: #001F66;
   --primary-gradient: linear-gradient(135deg, #0033AD 0%, #3355FF 100%);
-  --background: #001233;
-  --background-light: #001847;
-  --text-primary: #FFFFFF;
-  --text-secondary: #B8C7E5;
-  --surface: rgba(255, 255, 255, 0.05);
-  --surface-light: rgba(255, 255, 255, 0.1);
+  --background: #0A1929;
+  --background-light: #132F4C;
+  --surface: rgba(255, 255, 255, 0.1);
+  --surface-elevated: rgba(255, 255, 255, 0.15);
+  --surface-post: rgba(255, 255, 255, 0.95);
+  --text-primary: #0A1929;
+  --text-secondary: #476282;
+  --text-on-dark: #FFFFFF;
   --border: rgba(255, 255, 255, 0.1);
   --error: #FF4B4B;
   --success: #00C853;
+  --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 * {
@@ -30,7 +33,7 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   background-color: var(--background);
-  color: var(--text-primary);
+  color: var(--text-on-dark);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -41,16 +44,25 @@ button, input, textarea {
   font-family: inherit;
 }
 
-.logo-animation .node-connections {
-  animation: pulse 2s infinite;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-@keyframes pulse {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
+::-webkit-scrollbar-track {
+  background: var(--background);
 }
 
+::-webkit-scrollbar-thumb {
+  background: var(--surface);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--surface-elevated);
+}
+
+/* Animations */
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -68,29 +80,23 @@ button, input, textarea {
   100% { background-position: 1000px 0; }
 }
 
-.connect-wallet-btn {
-  position: relative;
-  overflow: hidden;
+/* Utility classes */
+.glass-effect {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-.connect-wallet-btn::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
-    45deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
-  transform: rotate(45deg);
-  animation: shimmer 3s infinite;
+.elevation-1 {
+  box-shadow: var(--card-shadow);
 }
 
-/* Responsive Design */
+.text-gradient {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Responsive typography */
 @media (max-width: 768px) {
   h1 {
     font-size: 2.5rem !important;
@@ -99,9 +105,4 @@ button, input, textarea {
   .lead {
     font-size: 1.2rem !important;
   }
-}
-
-/* Smooth transitions */
-* {
-  transition: all 0.3s ease;
 }

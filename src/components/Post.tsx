@@ -4,12 +4,11 @@ import { Post as PostType } from '../types';
 import { walletService } from '../services/wallet';
 
 const PostContainer = styled.div`
-  background: var(--surface);
+  background: var(--surface-post);
   border-radius: 16px;
-  padding: 20px;
+  padding: 24px;
   margin-bottom: 20px;
-  border: 1px solid var(--border);
-  backdrop-filter: blur(10px);
+  box-shadow: var(--card-shadow);
   transition: transform 0.2s ease;
 
   &:hover {
@@ -24,8 +23,8 @@ const PostHeader = styled.div`
 `;
 
 const Avatar = styled.div`
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: var(--primary-gradient);
   margin-right: 12px;
@@ -34,6 +33,7 @@ const Avatar = styled.div`
   justify-content: center;
   color: white;
   font-weight: 600;
+  font-size: 1.1rem;
 `;
 
 const UserInfo = styled.div`
@@ -42,25 +42,27 @@ const UserInfo = styled.div`
 
 const Address = styled.div`
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 1.1rem;
 
   .verified {
-    color: var(--primary-light);
+    color: var(--primary);
   }
 `;
 
 const Timestamp = styled.div`
   color: var(--text-secondary);
   font-size: 0.9rem;
+  margin-top: 2px;
 `;
 
 const Content = styled.div`
   color: var(--text-primary);
-  font-size: 1rem;
-  line-height: 1.5;
+  font-size: 1.1rem;
+  line-height: 1.6;
   margin-bottom: 20px;
   white-space: pre-wrap;
   word-break: break-word;
@@ -68,77 +70,58 @@ const Content = styled.div`
 
 const Actions = styled.div`
   display: flex;
-  gap: 20px;
+  gap: 24px;
   color: var(--text-secondary);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 16px;
+  margin-top: 16px;
 `;
 
 const ActionButton = styled.button<{ active?: boolean }>`
   background: none;
   border: none;
-  color: ${props => props.active ? 'var(--primary-light)' : 'var(--text-secondary)'};
+  color: ${props => props.active ? 'var(--primary)' : 'var(--text-secondary)'};
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  padding: 8px;
+  padding: 8px 16px;
   border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
 
   &:hover {
-    color: var(--primary-light);
-    background: var(--surface-light);
+    color: var(--primary);
+    background: rgba(0, 51, 173, 0.1);
   }
-`;
 
-const TipInput = styled.input`
-  width: 80px;
-  padding: 4px 8px;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  background: var(--surface-light);
-  color: var(--text-primary);
-  margin-right: 8px;
+  .count {
+    font-weight: 600;
+  }
 
-  &:focus {
-    outline: none;
-    border-color: var(--primary-light);
+  .ada {
+    font-size: 0.9rem;
+    opacity: 0.8;
   }
 `;
 
 interface PostProps {
   post: PostType;
-  onLike?: (postId: string) => void;
+  onLike?: (postId: string, balance: number) => void;
   onComment?: (postId: string, comment: string) => void;
-  onTip?: (postId: string, amount: number) => void;
 }
 
-export const Post: React.FC<PostProps> = ({ post, onLike, onComment, onTip }) => {
-  const [tipAmount, setTipAmount] = useState('');
-  const [showTipInput, setShowTipInput] = useState(false);
+export const Post: React.FC<PostProps> = ({ post, onLike, onComment }) => {
   const [isLiked, setIsLiked] = useState(false);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    onLike?.(post.id);
-  };
-
-  const handleTip = async () => {
-    if (!showTipInput) {
-      setShowTipInput(true);
-      return;
-    }
-
-    const amount = parseFloat(tipAmount);
-    if (isNaN(amount) || amount <= 0) return;
-
+  const handleLike = async () => {
     try {
-      await walletService.sendTip(post.authorAddress, amount);
-      onTip?.(post.id, amount);
-      setTipAmount('');
-      setShowTipInput(false);
+      const balance = await walletService.getBalance();
+      setIsLiked(!isLiked);
+      onLike?.(post.id, balance);
     } catch (error) {
-      console.error('Error sending tip:', error);
-      // TODO: Show error toast
+      console.error('Error getting wallet balance:', error);
     }
   };
 
@@ -147,14 +130,35 @@ export const Post: React.FC<PostProps> = ({ post, onLike, onComment, onTip }) =>
 
   const formatTimestamp = (timestamp: number) => {
     const date = new Date(timestamp);
-    return date.toLocaleString();
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+    
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    if (days < 7) return `${days}d ago`;
+    
+    return date.toLocaleDateString();
+  };
+
+  const formatADA = (amount: number) => {
+    if (amount >= 1000000) {
+      return `${(amount / 1000000).toFixed(1)}M`;
+    }
+    if (amount >= 1000) {
+      return `${(amount / 1000).toFixed(1)}K`;
+    }
+    return amount.toFixed(1);
   };
 
   return (
     <PostContainer>
       <PostHeader>
         <Avatar>
-          {post.authorAddress.slice(0, 2)}
+          {post.authorAddress.slice(0, 2).toUpperCase()}
         </Avatar>
         <UserInfo>
           <Address>
@@ -171,27 +175,15 @@ export const Post: React.FC<PostProps> = ({ post, onLike, onComment, onTip }) =>
 
       <Actions>
         <ActionButton active={isLiked} onClick={handleLike}>
-          {isLiked ? '❤️' : '🤍'} {post.likes}
+          {isLiked ? '❤️' : '🤍'} 
+          <span className="count">{formatADA(post.likeBalance)}</span>
+          <span className="ada">₳</span>
         </ActionButton>
         <ActionButton onClick={() => onComment?.(post.id, '')}>
-          💭 {post.comments.length}
+          💭 <span className="count">{post.comments.length}</span>
         </ActionButton>
-        <ActionButton onClick={handleTip}>
-          {showTipInput ? (
-            <>
-              <TipInput
-                type="number"
-                placeholder="ADA"
-                value={tipAmount}
-                onChange={(e) => setTipAmount(e.target.value)}
-                min="0"
-                step="0.5"
-              />
-              Send
-            </>
-          ) : (
-            <>💝 {post.tips} ADA</>
-          )}
+        <ActionButton>
+          🔗 Share
         </ActionButton>
       </Actions>
     </PostContainer>

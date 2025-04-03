@@ -4,10 +4,10 @@ export interface Post {
   ipfsHash: string;
   authorAddress: string;
   timestamp: number;
-  likes: number;
-  tips: number;
-  signature: string;
+  likeBalance: number;  // Total ADA balance of wallets that liked the post
+  likers: string[];    // Array of wallet addresses that liked the post
   comments: Comment[];
+  signature?: string;  // Wallet signature for verification
 }
 
 export interface Comment {
@@ -15,24 +15,22 @@ export interface Comment {
   content: string;
   authorAddress: string;
   timestamp: number;
-  signature: string;
+  signature?: string;
 }
 
 export interface UserProfile {
   address: string;
   displayName?: string;
   bio?: string;
-  avatarUrl?: string;
-  stakeAmount: number;
+  avatar?: string;
   verified: boolean;
-  posts: string[]; // Array of post IDs
-  followers: string[]; // Array of wallet addresses
-  following: string[]; // Array of wallet addresses
+  totalStaked: number;  // Amount of ADA staked
+  joinedAt: number;
 }
 
 export interface WalletState {
   connected: boolean;
-  address?: string;
-  balance?: number;
-  network?: string;
+  address: string | null;
+  balance: number | null;
+  network: string | null;
 }
