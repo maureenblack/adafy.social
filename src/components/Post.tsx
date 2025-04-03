@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Post as PostType } from '../types';
 import { walletService } from '../services/wallet';
+import { IoCheckmarkCircle } from 'react-icons/io5';
+import { IoChatbubbleOutline, IoShareSocialOutline, IoHeartOutline, IoHeart } from 'react-icons/io5';
 
 const PostContainer = styled.div`
   background: var(--surface-post);
@@ -22,35 +24,39 @@ const PostHeader = styled.div`
   margin-bottom: 15px;
 `;
 
-const Avatar = styled.div`
-  width: 44px;
-  height: 44px;
+const Avatar = styled.img`
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: var(--primary-gradient);
   margin-right: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 600;
-  font-size: 1.1rem;
+  object-fit: cover;
+  background: var(--surface);
+  border: 2px solid var(--border);
 `;
 
 const UserInfo = styled.div`
   flex: 1;
 `;
 
-const Address = styled.div`
+const DisplayName = styled.div`
   color: var(--text-primary);
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-size: 1.1rem;
 
   .verified {
-    color: var(--primary);
+    color: #3498db;
+    font-size: 18px;
+    margin-top: 1px;
   }
+`;
+
+const Username = styled.div`
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 1px;
 `;
 
 const Timestamp = styled.div`
@@ -91,13 +97,24 @@ const ActionButton = styled.button<{ active?: boolean }>`
   font-size: 1rem;
   font-weight: 500;
 
+  svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+  }
+
   &:hover {
     color: var(--primary);
-    background: rgba(0, 51, 173, 0.1);
+    background: var(--hover-overlay);
+
+    svg {
+      transform: scale(1.1);
+    }
   }
 
   .count {
     font-weight: 600;
+    min-width: 24px;
   }
 
   .ada {
@@ -157,16 +174,19 @@ export const Post: React.FC<PostProps> = ({ post, onLike, onComment }) => {
   return (
     <PostContainer>
       <PostHeader>
-        <Avatar>
-          {post.authorAddress.slice(0, 2).toUpperCase()}
-        </Avatar>
+        <Avatar 
+          src={post.author.avatarUrl} 
+          alt={post.author.displayName}
+          onError={(e) => {
+            e.currentTarget.src = `https://api.dicebear.com/7.x/initials/svg?seed=${post.author.displayName}`;
+          }}
+        />
         <UserInfo>
-          <Address>
-            {formatAddress(post.authorAddress)}
-            {post.signature && (
-              <span className="verified" title="Verified">✓</span>
-            )}
-          </Address>
+          <DisplayName>
+            {post.author.displayName}
+            {post.author.verified && <IoCheckmarkCircle className="verified" />}
+          </DisplayName>
+          <Username>@{post.author.username}</Username>
           <Timestamp>{formatTimestamp(post.timestamp)}</Timestamp>
         </UserInfo>
       </PostHeader>
@@ -175,15 +195,15 @@ export const Post: React.FC<PostProps> = ({ post, onLike, onComment }) => {
 
       <Actions>
         <ActionButton active={isLiked} onClick={handleLike}>
-          {isLiked ? '❤️' : '🤍'} 
+          {isLiked ? <IoHeart /> : <IoHeartOutline />} 
           <span className="count">{formatADA(post.likeBalance)}</span>
           <span className="ada">₳</span>
         </ActionButton>
         <ActionButton onClick={() => onComment?.(post.id, '')}>
-          💭 <span className="count">{post.comments.length}</span>
+          <IoChatbubbleOutline /> <span className="count">{post.comments.length}</span>
         </ActionButton>
         <ActionButton>
-          🔗 Share
+          <IoShareSocialOutline /> Share
         </ActionButton>
       </Actions>
     </PostContainer>

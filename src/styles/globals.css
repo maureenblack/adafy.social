@@ -2,23 +2,25 @@
 
 :root {
   /* Light theme */
-  --primary: #0033AD;
-  --primary-light: #3355FF;
-  --primary-dark: #001F66;
-  --primary-gradient: linear-gradient(135deg, #0033AD 0%, #3355FF 100%);
+  --primary: #0055FF;
+  --primary-light: #4477FF;
+  --primary-dark: #0044CC;
+  --primary-gradient: linear-gradient(135deg, #0055FF 0%, #4477FF 100%);
 }
 
 [data-theme="light"] {
-  --background: #F8FAFC;
-  --background-light: #EEF2F6;
+  --background: #F8FAFF;
+  --background-light: #EDF2FF;
   --surface: #FFFFFF;
   --surface-elevated: #FFFFFF;
   --surface-post: #FFFFFF;
-  --text-primary: #0A1929;
-  --text-secondary: #476282;
-  --text-on-dark: #0A1929;
+  --nav-background: #000000;
+  --text-primary: #1A1A2E;
+  --text-secondary: #4A4A5A;
+  --text-on-dark: #FFFFFF;
   --border: rgba(0, 0, 0, 0.1);
-  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --card-shadow: 0 4px 20px rgba(0, 85, 255, 0.15);
+  --hover-overlay: rgba(0, 85, 255, 0.05);
 }
 
 [data-theme="dark"] {
@@ -27,11 +29,13 @@
   --surface: rgba(255, 255, 255, 0.05);
   --surface-elevated: rgba(255, 255, 255, 0.1);
   --surface-post: rgba(255, 255, 255, 0.08);
+  --nav-background: #0A1929;
   --text-primary: #FFFFFF;
   --text-secondary: #B8C7E5;
   --text-on-dark: #FFFFFF;
   --border: rgba(255, 255, 255, 0.1);
   --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  --hover-overlay: rgba(255, 255, 255, 0.05);
 }
 
 * {

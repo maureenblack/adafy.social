@@ -9,9 +9,8 @@ const Nav = styled.nav`
   left: 0;
   right: 0;
   z-index: 1000;
-  backdrop-filter: blur(8px);
-  background: rgba(255, 255, 255, 0.8);
-  border-bottom: 1px solid rgba(0, 51, 173, 0.1);
+  background: var(--nav-background);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 `;
 
 const NavContainer = styled.div`
@@ -34,7 +33,7 @@ const NavLinks = styled.div`
 `;
 
 const NavLink = styled.a`
-  color: var(--text-primary);
+  color: var(--text-on-dark);
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
